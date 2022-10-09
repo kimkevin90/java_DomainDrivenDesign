@@ -17,7 +17,9 @@ docker-compose down --volume
 
 # 1. Partner Domain
 ## Entity, Service 구현
+
 <img width="846" alt="image" src="https://user-images.githubusercontent.com/65535673/194752725-b3587939-f75c-402d-9715-280c9f385426.png">
+
 ## Application, Interface 개요
 - transaction으로 묶여야 하는 도메인 로직과 그 외 로직을 arrregation 하는 역할로 한정 짓는다.(Facade 패턴 적용)
 - 결국 응용 계층을 하나 더 둠으로써 도메인 계층에서 처리하기 애매한 요구사항을 충족할 수있는 여유가 생긴다.
