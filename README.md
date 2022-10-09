@@ -1,7 +1,7 @@
 # 초기 mysql 셋팅
-docker-compose -p order-dev up -d
-docker-compose -p gift-db up -d
-docker-compose down --volume
+- docker-compose -p order-dev up -d
+- docker-compose -p gift-db up -d
+- docker-compose down --volume
 
 # 대체키와 DIP
 1. 대체키
