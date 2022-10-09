@@ -31,6 +31,13 @@
 - Item에만 외부에서 접근하면 ItemOptionGroup & ItemOption으로은 Item domain 내 에서 접근한다.
 - 따라서 Item에만 random 대체키를 제공한다.
 
+# 3. Order Domain
+## Entity 구현
+- Order(root) -> OrderItem -> OrderItemOptionGroup -> OrderItemOption
+1) 주문의 전체 가격은 상품의 가격 * 주문 갯수 이다. => Order에서 OrderItem의 List를 뽑아서 각각의 상품별 가격을 sum한다.
+2) Order의 배송정보(수령인, 주소)는 각각 따로 생성하지만 하나의 정보로만 의미가 있으므로 @Embedded를 사용한다.
+3) OrderItem/OrderItemOptionGroup/OrderItemOption 3가지는 Factory를 만들고 Infra Layer에서 Impl 구현
+4) 
 
 
 https://github.com/gregshiny/example-gift 
