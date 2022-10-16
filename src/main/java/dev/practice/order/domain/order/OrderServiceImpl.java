@@ -20,6 +20,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public String registerOrder(OrderCommand.RegisterOrder requestOrder) {
         Order order = orderStore.store(requestOrder.toEntity());
+        // orderItem, orderItemGroup, orderItemOption등을 아래 Factory에서 진행
         orderItemSeriesFactory.store(order, requestOrder);
         return order.getOrderToken();
     }
@@ -29,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     public void paymentOrder(OrderCommand.PaymentRequest paymentRequest) {
         var orderToken = paymentRequest.getOrderToken();
         var order = orderReader.getOrder(orderToken);
+        // 외부 API호출
         paymentProcessor.pay(order, paymentRequest);
         order.orderComplete();
     }
@@ -39,5 +41,20 @@ public class OrderServiceImpl implements OrderService {
         var order = orderReader.getOrder(orderToken);
         var orderItemList = order.getOrderItemList();
         return orderInfoMapper.of(order, orderItemList);
+    }
+
+    @Override
+    @Transactional
+    public void updateReceiverInfo(String orderToken, OrderCommand.UpdateReceiverInfoRequest request) {
+        var order = orderReader.getOrder(orderToken);
+        order.updateDeliveryFragment(
+            request.getReceiverName(),
+            request.getReceiverPhone(),
+            request.getReceiverZipcode(),
+            request.getReceiverAddress1(),
+            request.getReceiverAddress2(),
+            request.getEtcMessage()
+        );
+        order.deliveryPrepare();
     }
 }

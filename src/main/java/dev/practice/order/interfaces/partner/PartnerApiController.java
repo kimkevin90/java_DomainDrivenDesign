@@ -20,14 +20,18 @@ public class PartnerApiController {
 
     @PostMapping
     public CommonResponse registerPartner(@RequestBody PartnerDto.RegisterRequest request) {
+        System.out.println("request :" + request);
         // 1. 외부에서 전달된 파라미터(dto) -> Command, Criteria 로 convert
         // 1) Dto의 toCommand로 변환방법
         // var command = request.toCommand();
         // 2) Mapper 라이브러리로 변환 방법
         var command = partnerDtoMapper.of(request);
+        System.out.println("command :" + command);
         // 2. facade 호출 후 partnerInfo 리턴
         var partnerInfo = partnerFacade.registerPartner(command);
+        System.out.println("partnerInfo :" + partnerInfo);
         var response = new PartnerDto.RegisterResponse(partnerInfo);
+        System.out.println("response :" + response);
         // 3. partnerInfo를 CommonResponse로 convert하고 return한다.
         return CommonResponse.success(response);
     }

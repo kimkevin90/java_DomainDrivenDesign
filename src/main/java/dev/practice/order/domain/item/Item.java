@@ -54,6 +54,7 @@ public class Item extends AbstractEntity {
         if (itemPrice == null) throw new InvalidParamException("Item.itemPrice");
 
         this.partnerId = partnerId;
+        // Item만 외부와 통신하므로 토큰을 생성한다 (optionGroup과 option에는 토큰 생성 x)
         this.itemToken = TokenGenerator.randomCharacterWithPrefix(ITEM_PREFIX);
         this.itemName = itemName;
         this.itemPrice = itemPrice;

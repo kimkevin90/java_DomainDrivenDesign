@@ -26,6 +26,7 @@ public class Partner extends AbstractEntity {
 
     private static final String PREFIX_PARTNER = "ptn_";
 
+    // AbstractEntity를 사용하여 createAt, updatedAt 자동 적용
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
@@ -48,6 +49,7 @@ public class Partner extends AbstractEntity {
         if (StringUtils.isEmpty(businessNo)) throw new RuntimeException("empty businessNo");
         if (StringUtils.isEmpty(email)) throw new RuntimeException("empty email");
 
+        // 객체 생성과 동시에 random 토큰 생성
         this.partnerToken = TokenGenerator.randomCharacterWithPrefix(PREFIX_PARTNER);
         this.partnerName = partnerName;
         this.businessNo = businessNo;
@@ -61,11 +63,12 @@ public class Partner extends AbstractEntity {
         ENABLE("활성화"), DISABLE("비활성화");
         private final String description;
     }
-
+    // 활성화
     public void enable() {
         this.status = Status.ENABLE;
     }
 
+    // 비 활성화
     public void disable() {
         this.status = Status.DISABLE;
     }

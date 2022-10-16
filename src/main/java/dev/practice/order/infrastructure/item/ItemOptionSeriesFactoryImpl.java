@@ -24,7 +24,7 @@ public class ItemOptionSeriesFactoryImpl implements ItemOptionSeriesFactory {
     @Override
     public List<ItemOptionGroup> store(ItemCommand.RegisterItemRequest command, Item item) {
         var itemOptionGroupRequestList = command.getItemOptionGroupRequestList();
-        // item의 기본값 정보만 저장할 시, 리턴
+        // 요구사항 중 item의 기본값 정보만 저장할 시, 리턴
         if (CollectionUtils.isEmpty(itemOptionGroupRequestList)) return Collections.emptyList();
 
         return itemOptionGroupRequestList.stream()

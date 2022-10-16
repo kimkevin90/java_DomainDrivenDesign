@@ -6,10 +6,11 @@ import dev.practice.order.domain.order.item.OrderItem;
 import dev.practice.order.domain.order.item.OrderItemOption;
 import dev.practice.order.domain.order.item.OrderItemOptionGroup;
 import dev.practice.order.domain.order.payment.PayMethod;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.List;
 
 public class OrderCommand {
 
@@ -29,19 +30,19 @@ public class OrderCommand {
 
         public Order toEntity() {
             var deliveryFragment = DeliveryFragment.builder()
-                    .receiverName(receiverName)
-                    .receiverPhone(receiverPhone)
-                    .receiverZipcode(receiverZipcode)
-                    .receiverAddress1(receiverAddress1)
-                    .receiverAddress2(receiverAddress2)
-                    .etcMessage(etcMessage)
-                    .build();
+                .receiverName(receiverName)
+                .receiverPhone(receiverPhone)
+                .receiverZipcode(receiverZipcode)
+                .receiverAddress1(receiverAddress1)
+                .receiverAddress2(receiverAddress2)
+                .etcMessage(etcMessage)
+                .build();
 
             return Order.builder()
-                    .userId(userId)
-                    .payMethod(payMethod)
-                    .deliveryFragment(deliveryFragment)
-                    .build();
+                .userId(userId)
+                .payMethod(payMethod)
+                .deliveryFragment(deliveryFragment)
+                .build();
         }
     }
 
@@ -57,14 +58,14 @@ public class OrderCommand {
 
         public OrderItem toEntity(Order order, Item item) {
             return OrderItem.builder()
-                    .order(order)
-                    .orderCount(orderCount)
-                    .partnerId(item.getPartnerId())
-                    .itemId(item.getId())
-                    .itemToken(itemToken)
-                    .itemName(itemName)
-                    .itemPrice(itemPrice)
-                    .build();
+                .order(order)
+                .orderCount(orderCount)
+                .partnerId(item.getPartnerId())
+                .itemId(item.getId())
+                .itemToken(itemToken)
+                .itemName(itemName)
+                .itemPrice(itemPrice)
+                .build();
         }
     }
 
@@ -78,10 +79,10 @@ public class OrderCommand {
 
         public OrderItemOptionGroup toEntity(OrderItem orderItem) {
             return OrderItemOptionGroup.builder()
-                    .orderItem(orderItem)
-                    .ordering(ordering)
-                    .itemOptionGroupName(itemOptionGroupName)
-                    .build();
+                .orderItem(orderItem)
+                .ordering(ordering)
+                .itemOptionGroupName(itemOptionGroupName)
+                .build();
         }
     }
 
@@ -95,11 +96,11 @@ public class OrderCommand {
 
         public OrderItemOption toEntity(OrderItemOptionGroup orderItemOptionGroup) {
             return OrderItemOption.builder()
-                    .orderItemOptionGroup(orderItemOptionGroup)
-                    .ordering(ordering)
-                    .itemOptionName(itemOptionName)
-                    .itemOptionPrice(itemOptionPrice)
-                    .build();
+                .orderItemOptionGroup(orderItemOptionGroup)
+                .ordering(ordering)
+                .itemOptionName(itemOptionName)
+                .itemOptionPrice(itemOptionPrice)
+                .build();
         }
     }
 
@@ -110,5 +111,17 @@ public class OrderCommand {
         private final String orderToken;
         private final Long amount;
         private final PayMethod payMethod;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class UpdateReceiverInfoRequest {
+        private final String receiverName;
+        private final String receiverPhone;
+        private final String receiverZipcode;
+        private final String receiverAddress1;
+        private final String receiverAddress2;
+        private final String etcMessage;
     }
 }

@@ -3,6 +3,28 @@
 - docker-compose -p gift-db up -d
 - docker-compose down --volume
 
+# DDD
+1. Domain : 추상화 레벨을 높여야 한다.
+- Entity
+- Service
+- Reader : DB에서 데이터 읽고 객체화
+- Store : 객체를 DB에 넣는 역할
+- Command, Criteria : 인터페이스에서 받은 데이터
+- Info : 엔티티를 바로 리턴하는게 아니라 Info로 정제 후 리턴 
+
+2. Infrastructure : 추상화 레벨을 낮게 가져간다.
+- Spring JPA, Mybatis ~ Reader & Store 인터페이스의 구현체
+- DIP : Infra에서 ReaderImpl을 구현 후 필요에 따라 JPA, DSL등으로 바꿀 수 있다.
+
+3. Application : Facadez
+- 도메인 로직의 호출과 그외의 것
+- 파트너 등록 ->  이메일 발송 등의 로직
+
+4. Interface
+- HTTP API 등의 Controller 
+- 외부 요청을 받아주는 DTO
+- DTO -> Command 전환 ~> Mapper
+
 # 대체키와 DIP
 1. 대체키
 - 엔티티의 식별자(PK)는 UUID로 생성
@@ -31,13 +53,18 @@
 - Item에만 외부에서 접근하면 ItemOptionGroup & ItemOption으로은 Item domain 내 에서 접근한다.
 - 따라서 Item에만 random 대체키를 제공한다.
 
+
 # 3. Order Domain
-## Entity 구현
+## Entity 구현 
 - Order(root) -> OrderItem -> OrderItemOptionGroup -> OrderItemOption
-1) 주문의 전체 가격은 상품의 가격 * 주문 갯수 이다. => Order에서 OrderItem의 List를 뽑아서 각각의 상품별 가격을 sum한다.
-2) Order의 배송정보(수령인, 주소)는 각각 따로 생성하지만 하나의 정보로만 의미가 있으므로 @Embedded를 사용한다.
+1) 주문의 전체 가격은 (상품의 가격 + 옵션 가격) * 주문 갯수 이다. => Order에서 OrderItem의 List를 뽑아서 각각의 상품별 가격을 sum한다.
+2) Order의 배송정보(수령인, 주소)는 각각 따로 생성하지만 하나의 정보로만 의미가 있으므로 @Embedded를 사용한다. 
+- 배송정보만 따로 객체로 관리하여 @Embedded 이용
 3) OrderItem/OrderItemOptionGroup/OrderItemOption 3가지는 Factory를 만들고 Infra Layer에서 Impl 구현
-4) 
+4) 결제 처리 : 
+- OrderService가 결제 완료 메시지를 받으면, PaymentProcessor에 전달하고 PaymentProcessor 구현체는 
+직접 결제 PG를 호출하는게 아닌 PayApiCaller를 이용하여 결제PG를 실행한다. 이를 통해 추가 결제PG가 들어와도 if문을 안쓰고 해당 PG를 호출한다.
+- 결제 Vailidation 필요 = 주문 금액 & 결제 금액 일치 여부 체크
 
-
+참고)
 https://github.com/gregshiny/example-gift 

@@ -13,6 +13,7 @@ public class PartnerInfo {
     private final Partner.Status status;
 
 
+    // Partner와 PartnerInfo는 같은 도메인에 있으므로 partner 바로 받아 적용
     public PartnerInfo(
         Partner partner) {
         this.id = partner.getId();

@@ -17,6 +17,7 @@ public class PartnerStoreImpl implements PartnerStore {
 
     @Override
     public Partner store(Partner partner) {
+        System.out.println("store partner : " + partner);
         if (StringUtils.isEmpty(partner.getPartnerToken())) throw new InvalidParamException("partner.getPartnerToken()");
         if (StringUtils.isEmpty(partner.getPartnerName())) throw new InvalidParamException("partner.getPartnerName()");
         if (StringUtils.isEmpty(partner.getBusinessNo())) throw new InvalidParamException("partner.getBusinessNo()");

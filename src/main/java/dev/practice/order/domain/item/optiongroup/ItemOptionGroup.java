@@ -43,6 +43,7 @@ public class ItemOptionGroup extends AbstractEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "itemOptionGroup", cascade = CascadeType.PERSIST)
     private List<ItemOption> itemOptionList = Lists.newArrayList();
 
+    // ItemOptionGroup은 Item이 존재해야하므로 조건 추가
     @Builder
     public ItemOptionGroup(Item item, Integer ordering, String itemOptionGroupName) {
         if (item == null) throw new InvalidParamException("ItemOptionGroup.item");

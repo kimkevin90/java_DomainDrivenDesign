@@ -1,27 +1,18 @@
 package dev.practice.order.domain.order.item;
 
 import com.google.common.collect.Lists;
+import dev.practice.order.common.exception.IllegalStatusException;
 import dev.practice.order.common.exception.InvalidParamException;
 import dev.practice.order.domain.AbstractEntity;
 import dev.practice.order.domain.order.Order;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -63,13 +54,13 @@ public class OrderItem extends AbstractEntity {
 
     @Builder
     public OrderItem(
-            Order order,
-            Integer orderCount,
-            Long partnerId,
-            Long itemId,
-            String itemName,
-            String itemToken,
-            Long itemPrice
+        Order order,
+        Integer orderCount,
+        Long partnerId,
+        Long itemId,
+        String itemName,
+        String itemToken,
+        Long itemPrice
     ) {
         if (order == null) throw new InvalidParamException("OrderItemLine.order");
         if (orderCount == null) throw new InvalidParamException("OrderItemLine.orderCount");
@@ -91,8 +82,24 @@ public class OrderItem extends AbstractEntity {
 
     public Long calculateTotalAmount() {
         var itemOptionTotalAmount = orderItemOptionGroupList.stream()
-                .mapToLong(OrderItemOptionGroup::calculateTotalAmount)
-                .sum();
+            // 옵션 가격 알려줘
+            .mapToLong(OrderItemOptionGroup::calculateTotalAmount)
+            .sum();
         return (itemPrice + itemOptionTotalAmount) * orderCount;
+    }
+
+    public void deliveryPrepare() {
+        if (this.deliveryStatus != DeliveryStatus.BEFORE_DELIVERY) throw new IllegalStatusException();
+        this.deliveryStatus = DeliveryStatus.DELIVERY_PREPARE;
+    }
+
+    public void inDelivery() {
+        if (this.deliveryStatus != DeliveryStatus.DELIVERY_PREPARE) throw new IllegalStatusException();
+        this.deliveryStatus = DeliveryStatus.DELIVERING;
+    }
+
+    public void deliveryComplete() {
+        if (this.deliveryStatus != DeliveryStatus.DELIVERING) throw new IllegalStatusException();
+        this.deliveryStatus = DeliveryStatus.COMPLETE_DELIVERY;
     }
 }

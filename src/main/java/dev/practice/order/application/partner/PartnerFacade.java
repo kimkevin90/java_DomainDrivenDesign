@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+/*
+    비즈니스 결정은 내리지 않지만 부수적 업무들을 조합한다.
+    aggregation 역할이므로 Facade라 명칭한다.
+*/
+
 public class PartnerFacade {
     private final PartnerService partnerService;
     private final NotificationService notificationService;

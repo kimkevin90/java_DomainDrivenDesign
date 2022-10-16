@@ -35,6 +35,7 @@ public class ItemOption extends AbstractEntity {
     private String itemOptionName;
     private Long itemOptionPrice;
 
+    // ItemOption은 itemOptionGroup이 존재해야하므로 조건 추가
     @Builder
     public ItemOption(
             ItemOptionGroup itemOptionGroup,

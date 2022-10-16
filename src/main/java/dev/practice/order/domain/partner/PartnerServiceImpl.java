@@ -16,20 +16,18 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     @Transactional
     public PartnerInfo registerPartner(PartnerCommand command) {
-//        var initPartner= Partner.builder()
-//            .partnerName(command.getPartnerName())
-//            .businessNo(command.getBusinessNo())
-//            .email(command.getEmail())
-//            .build();
-        System.out.println("PartnerCommand command------" + command);
-        // 1. command -> initPartner로 만들기
-        // 리팩토링
-        var initPartner= command.toEntity();
+       /* command로 initPartner 리팩토링
+             var initPartner= Partner.builder()
+            .partnerName(command.getPartnerName())
+            .businessNo(command.getBusinessNo())
+            .email(command.getEmail())
+            .build();
+       * */
 
-        System.out.println("initPartner------" + initPartner);
+        // 1. command -> initPartner로 만들기
+        var initPartner= command.toEntity();
         // 2. initPartner save to DB
         Partner partner = partnerStore.store(initPartner);
-
         // 3. 가져온 Partner 정보를 -> PartnerInfo 변환 AND Return
         return new PartnerInfo(partner);
     }

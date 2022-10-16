@@ -90,9 +90,14 @@ public class Order extends AbstractEntity {
     /**
      * 주문 가격 = 주문 상품의 총 가격
      * 주문 하나의 상품의 가격 = (상품 가격 + 상품 옵션 가격) * 주문 갯수
+     *
+     * (모자 9900 + 빨강 100) * 2개
+     *
+     * 과거의 방식은 OrderService에서 전체 데이터조회하여 sum한다.
      */
     public Long calculateTotalAmount() {
         return orderItemList.stream()
+                // 돌면서 주문 하나의 상품 가격
                 .mapToLong(OrderItem::calculateTotalAmount)
                 .sum();
     }
@@ -100,6 +105,12 @@ public class Order extends AbstractEntity {
     public void orderComplete() {
         if (this.status != Status.INIT) throw new IllegalStatusException();
         this.status = Status.ORDER_COMPLETE;
+    }
+
+    public void deliveryPrepare() {
+        if (this.status != Status.ORDER_COMPLETE) throw new IllegalStatusException();
+        this.status = Status.DELIVERY_PREPARE;
+        this.getOrderItemList().forEach(OrderItem::deliveryPrepare);
     }
 
     public boolean isAlreadyPaymentComplete() {
@@ -111,5 +122,24 @@ public class Order extends AbstractEntity {
                 return true;
         }
         return false;
+    }
+
+
+    public void updateDeliveryFragment(
+        String receiverName,
+        String receiverPhone,
+        String receiverZipcode,
+        String receiverAddress1,
+        String receiverAddress2,
+        String etcMessage
+    ) {
+        this.deliveryFragment = DeliveryFragment.builder()
+            .receiverName(receiverName)
+            .receiverPhone(receiverPhone)
+            .receiverZipcode(receiverZipcode)
+            .receiverAddress1(receiverAddress1)
+            .receiverAddress2(receiverAddress2)
+            .etcMessage(etcMessage)
+            .build();
     }
 }

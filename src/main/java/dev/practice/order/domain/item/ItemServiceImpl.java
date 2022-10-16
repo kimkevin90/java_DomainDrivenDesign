@@ -29,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
         // 3. itemOptionGroup 과 itemOption을 저장
         /**
          * 리팩토링 전
+         * getItemOptionGroupRequestList을 돌면서 item 저장
          * command.getItemOptionGroupRequestList().forEach(requestItemOptionGroup -> {
          *                     // itemOptionGroup store
          *                     var initItemOptionGroup = ItemOptionGroup.builder()
@@ -51,7 +52,10 @@ public class ItemServiceImpl implements ItemService {
          *                 });
          **/
 
+        // 3의 역할을 factory에 위임
         itemOptionSeriesFactory.store(command, item);
+
+        // 4. return itemToken
         return item.getItemToken();
     }
 
